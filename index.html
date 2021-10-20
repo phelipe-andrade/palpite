@@ -15,8 +15,8 @@
 <body>
   <section class="container">
     <h1>Qual é o número?</h1>
-    <span class="mensagem">ERRO</span>
-    <ul class="digitos">
+    <span class="mensagem" data-message='message'>mensagem</span>
+    <ul class="digitos" data-digitos="digitos">
       <li class="conjunto1">
         <span class="d1"></span>
         <span class="d2"></span>
@@ -35,7 +35,7 @@
         <span class="d6"></span>
         <span class="d7"></span>
       </li>
-      <li class="conjunto3 ">
+      <li class="conjunto3">
         <span class="d1"></span>
         <span class="d2"></span>
         <span class="d3"></span>
@@ -45,7 +45,7 @@
         <span class="d7"></span>
       </li>
     </ul>
-    <button class="nova"> <img src="./img/refresh_24px_outlined.svg" alt="refresh_24px_outlined"> Nova partida</button>
+    <button class="refresh" data-refresh="refresh"> <img src="./img/refresh_24px_outlined.svg" alt="refresh_24px_outlined"> Nova partida</button>
     <div class="palpite">
       <input type="number" placeholder="Digite o palpite" data-palpite="palpite">
       <button class="enviar" data-enviar="enviar">Enviar</button>
