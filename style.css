@@ -63,10 +63,10 @@ body {
   align-self: center;
   font-family: 'Montserrat', sans-serif;
   font-size: 1rem;
-  line-height: 19px;
+  line-height: 20px;
+  letter-spacing: -1px;
   font-weight: bold;
-  text-transform: uppercase;
-  color: #cc3300;
+  color: #ff6600;
   margin-bottom: 35px;
 }
 
@@ -80,14 +80,22 @@ body {
   align-self: center;
   display: flex;
   justify-content: center;
-  min-height: 135px;
   width: 247px;
   margin-top: 51px;
   margin-bottom: 120px;
 }
 
+.digitos.message {
+  margin-top: 0px;
+}
+
+.digitos.reload {
+  margin-bottom: 31px;
+}
+
 .digitos li {
   position: relative;
+  min-height: 135px;
   width: 70px;
 }
 
@@ -159,6 +167,10 @@ body {
   background: #262a34;
 }
 
+.conjunto1.active span {
+  background: #dddddd;
+}
+
 .conjunto2.active {
   display: block;
 }
@@ -179,7 +191,7 @@ body {
 
 /* Botão nova partida */
 
-.nova.active {
+.refresh.active {
   font-family: 'Roboto', sans-serif;
   color: #ffffff;
   text-transform: uppercase;
@@ -199,11 +211,11 @@ body {
   margin-bottom: 78px;
 }
 
-.nova {
+.refresh {
   display: none;
 }
 
-.nova img {
+.refresh img {
   margin-right: 2px;
 }
 
@@ -259,7 +271,73 @@ body {
     width: 205px;
   }
 
-  .nova.active {
+  .digitos {
+    width: 183px;
+  }
+
+  .digitos.message {
+    margin-top: 0px;
+  }
+
+  .digitos.reload {
+    margin-bottom: 56px;
+  }
+
+  .digitos li {
+    min-height: 100px;
+    width: 55px;
+  }
+
+  .digitos span {
+    width: 51px;
+    height: 11px;
+  }
+
+  .d1,
+  .d4 {
+    left: 2px;
+  }
+
+  .d2 {
+    top: 21px;
+    left: -20px;
+  }
+
+  .d3 {
+    bottom: 21px;
+    left: -20px;
+    transform: rotate(270deg);
+  }
+
+  .d4 {
+    bottom: 0px;
+    transform: rotate(180deg);
+  }
+
+  .d5 {
+    right: -20px;
+    bottom: 21px;
+    transform: rotate(90deg);
+  }
+
+  .d6 {
+    top: 21px;
+    right: -20px;
+    transform: rotate(90deg);
+  }
+
+  .d7 {
+    clip-path: polygon(80% 0, 94% 50%, 80% 100%, 20% 100%, 6% 50%, 20% 0);
+    top: 44.5px;
+    left: 2px;
+  }
+
+  .conjunto2,
+  .conjunto3 {
+    margin-left: 9px;
+  }
+
+  .refresh.active {
     margin-bottom: 73px;
   }
 
