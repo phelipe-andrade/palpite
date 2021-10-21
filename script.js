@@ -4,8 +4,7 @@
 - Terceiro: Tratar o valor iniserido no input, eliminando os zero(s) a esquerda com a utilização do Regexp;
 - Quarto: Comparar os numero da requisição com os inseridos no input(já limpos);
 - Quinto: Inserir o numero limpo(sem zero a esquerda) no display(LED) para mostrar qual foi o valor digitado e,
-   mostrar no campo da mensagem caso tenha acertado ou, se o numero e maior ou menor;
-*/
+   mostrar no campo da mensagem caso tenha acertado ou, se o numero e maior ou menor;*/
 
 const input = document.querySelector('[data-palpite]');
 const button = document.querySelector('[data-enviar]');
@@ -33,7 +32,7 @@ const digitConfig = {
   9: [1, 2, 4, 5, 6, 7],
 };
 
-// Realia um requisição para receber o calor.
+// Realiza uma requisição para receber o numero aleatório.
 async function initFetch() {
   const startfetch = await fetch(
     'https://us-central1-ss-devops.cloudfunctions.net/rand?min=1&max=300',
@@ -42,27 +41,25 @@ async function initFetch() {
   numberRandom = json.value;
 
   // Faz a comparação para saber se ocorreu algum erro
-  // no envio do valor.
-  console.log();
+  // no recebimento do numero aleatório.
   if (numberRandom === undefined) {
     // Ativa as funções e parametros para inserir o erro no display.
     digitos[0].classList.remove('init');
     digitos.forEach((d) => {
       d.classList.add('active');
-      const erroNumber = String(json.StatusCode);
-      setColorElements([erroNumber[0], erroNumber[1], erroNumber[2]]);
-      statusButton(true);
-      refresh.classList.add('active');
-      setMessage('ERRO', '#CC3300', true);
-      layout(true);
     });
+    const erroNumber = String(json.StatusCode);
+    setColorElements([erroNumber[0], erroNumber[1], erroNumber[2]]);
+    statusButton(true);
+    refresh.classList.add('active');
+    setMessage('ERRO', '#CC3300', true);
+    layout(true);
   }
 }
 initFetch();
 
-// Redefine as configurações inicias para uma
-// nova partida quando tem o acerto do numero ou
-// apos ocorrer um erro.
+// Redefine as configurações inicias ao click no botão "NOVA PARTIDA"
+// quando ocorrer um acerto ou algum erro.
 const handleRefresh = () => {
   display.classList.remove('message', 'reload');
   refresh.classList.remove('active');
@@ -83,18 +80,12 @@ const setMessage = (text, color, boolean) => {
     : message.classList.remove('active');
 };
 
-// Desabilida e habilida o input e o butão de enviar
+// Desabilida e habilida o input e o botão de enviar
 const statusButton = (status) => {
   const father = input.parentNode;
-  if (status) {
-    button.disabled = status;
-    input.disabled = status;
-    father.classList.add('off');
-  } else {
-    button.disabled = status;
-    input.disabled = status;
-    father.classList.remove('off');
-  }
+  button.disabled = status;
+  input.disabled = status;
+  status ? father.classList.add('off') : father.classList.remove('off');
 };
 
 // Configura as margins do display para
@@ -133,7 +124,7 @@ const resetColorElements = (init) => {
     });
   });
 
-  // Quando ocorrer um erro ou acertar o numero,
+  // Quando ocorrer um erro ou acerto do numero,
   // insere o padrão inicial no display (igual a 0).
   if (init) {
     for (let i = 0; i <= 5; i++) {
@@ -142,42 +133,44 @@ const resetColorElements = (init) => {
   }
 };
 
-// Limpa os espaços do display
-// na qual não estão sendo utilizados,
-// dependendo do tamanho do numero inserido no palpite.
+// Limpa todos os espaços do display
+// para que o proximo numero ocupe apenas
+// a quantidade minima necessária para ser impresso.
 const cleanDigit = () => {
   digitos.forEach((d) => {
     d.classList.remove('active');
   });
 };
 
-// Configura as cores do display de acordo com o resultado
-const setColorElements = (n1) => {
+// Configura as cores do display de acordo com o resultado e,
+// ativa a quantidade necessária de digitos para a impressão no display.
+const setColorElements = (numbers) => {
   colorRG = numberRandom === undefined ? '#CC3300' : '#262A34';
   const colorGreen = colorDigit ? '#32BF00' : colorRG;
 
   let dis = 0;
-  n1.forEach((number) => {
+  numbers.forEach((number) => {
     digitConfig[number].forEach((n) => {
       const digitFist = digitos[dis].children[n - 1];
       digitFist.style.background = colorGreen;
     });
+    digitos[dis].classList.add('active');
     dis++;
   });
 };
 
 // Inicia a introdução dos numeros do palpite para o display.
 const handleClick = () => {
+  compareNumber(+input.value);
   // Usando o Regexp, faz a verificação se possue 1 ou 2 zeros a esqueda,
   // caso tenha, o mesmo irá remove-los.
   const regexp = input.value.length > 2 ? /^0{1,2}/ : /^0{1}/;
   const clearZero = input.value.length === 1 ? '' : regexp;
   const number = input.value.replace(clearZero, '');
 
-  compareNumber(+input.value);
-
   // Limpa o value do input
   input.value = '';
+
   resetColorElements(false);
   cleanDigit();
 
@@ -186,31 +179,27 @@ const handleClick = () => {
 
   // Faz a comparação da quantidade de numeros depois que o Regexp
   // removeu o(s) zero(s) da esquerda.
-  switch (number.length) {
-    // number com 3 numeros
-    case 3:
-      digitos.forEach((d) => {
-        d.classList.add('active');
-      });
-      setColorElements([number[0], number[1], number[2]]);
+  if (number >= 1 && number <= 300) {
+    switch (number.length) {
+      // number com 3 numeros
+      case 3:
+        setColorElements([number[0], number[1], number[2]]);
+        break;
+      // number com 2 numeros
+      case 2:
+        setColorElements([number[0], number[1]]);
+        break;
+      // number com 1 numero
+      case 1:
+        setColorElements([number[0]]);
+        break;
 
-      break;
-
-    // number com 2 numeros
-    case 2:
-      digitos[1].classList.add('active');
-      digitos[0].classList.add('active');
-      setColorElements([number[0], number[1]]);
-      break;
-
-    // number com 1 numeros
-    case 1:
-      digitos[0].classList.add('active');
-      setColorElements([number[0]]);
-      break;
-
-    default:
-      break;
+      default:
+        break;
+    }
+  } else {
+    setMessage('Numero fora do parametro!', '#CC3300', true);
+    setColorElements([0]);
   }
 };
 
